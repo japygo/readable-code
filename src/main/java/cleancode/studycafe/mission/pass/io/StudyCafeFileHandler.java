@@ -1,4 +1,4 @@
-package cleancode.studycafe.mission.io;
+package cleancode.studycafe.mission.pass.io;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -6,13 +6,16 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import cleancode.studycafe.mission.model.StudyCafeLockerPass;
-import cleancode.studycafe.mission.model.StudyCafePass;
-import cleancode.studycafe.mission.model.StudyCafePassType;
+import cleancode.studycafe.mission.pass.model.locker.StudyCafeLockerPass;
+import cleancode.studycafe.mission.pass.model.locker.StudyCafeLockerPasses;
+import cleancode.studycafe.mission.pass.model.pass.StudyCafePass;
+import cleancode.studycafe.mission.pass.model.pass.StudyCafePassType;
+import cleancode.studycafe.mission.pass.model.pass.StudyCafePasses;
 
-public class StudyCafeFileHandler {
+public class StudyCafeFileHandler implements FileHandler {
 
-    public List<StudyCafePass> readStudyCafePasses() {
+    @Override
+    public StudyCafePasses readStudyCafePasses() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/pass-list.csv"));
             List<StudyCafePass> studyCafePasses = new ArrayList<>();
@@ -27,13 +30,14 @@ public class StudyCafeFileHandler {
                 studyCafePasses.add(studyCafePass);
             }
 
-            return studyCafePasses;
+            return StudyCafePasses.of(studyCafePasses);
         } catch (IOException e) {
             throw new RuntimeException("파일을 읽는데 실패했습니다.", e);
         }
     }
 
-    public List<StudyCafeLockerPass> readLockerPasses() {
+    @Override
+    public StudyCafeLockerPasses readLockerPasses() {
         try {
             List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/locker.csv"));
             List<StudyCafeLockerPass> lockerPasses = new ArrayList<>();
@@ -47,7 +51,7 @@ public class StudyCafeFileHandler {
                 lockerPasses.add(lockerPass);
             }
 
-            return lockerPasses;
+            return StudyCafeLockerPasses.of(lockerPasses);
         } catch (IOException e) {
             throw new RuntimeException("파일을 읽는데 실패했습니다.", e);
         }
