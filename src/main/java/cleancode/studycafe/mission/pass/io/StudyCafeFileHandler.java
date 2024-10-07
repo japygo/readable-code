@@ -14,10 +14,13 @@ import cleancode.studycafe.mission.pass.model.pass.StudyCafePasses;
 
 public class StudyCafeFileHandler implements FileHandler {
 
+    private static final String PASS_LIST_PATH = "src/main/resources/cleancode/studycafe/pass-list.csv";
+    private static final String LOCKER_PASS_LIST_PATH = "src/main/resources/cleancode/studycafe/locker.csv";
+
     @Override
     public StudyCafePasses readStudyCafePasses() {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/pass-list.csv"));
+            List<String> lines = Files.readAllLines(Paths.get(PASS_LIST_PATH));
             List<StudyCafePass> studyCafePasses = new ArrayList<>();
             for (String line : lines) {
                 String[] values = line.split(",");
@@ -39,7 +42,7 @@ public class StudyCafeFileHandler implements FileHandler {
     @Override
     public StudyCafeLockerPasses readLockerPasses() {
         try {
-            List<String> lines = Files.readAllLines(Paths.get("src/main/resources/cleancode/studycafe/locker.csv"));
+            List<String> lines = Files.readAllLines(Paths.get(LOCKER_PASS_LIST_PATH));
             List<StudyCafeLockerPass> lockerPasses = new ArrayList<>();
             for (String line : lines) {
                 String[] values = line.split(",");

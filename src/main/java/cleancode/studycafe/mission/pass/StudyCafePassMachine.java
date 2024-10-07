@@ -31,16 +31,15 @@ public class StudyCafePassMachine implements MachineRunnable {
             outputHandler.showWelcomeMessage();
             outputHandler.showAnnouncement();
 
-            StudyCafePassType studyCafePassType = getStudyCafePassType();
-            StudyCafePasses studyCafePasses = getStudyCafePassesBy(studyCafePassType);
-            StudyCafePass selectedPass = getSelectedPass(studyCafePasses);
+            StudyCafePassType passType = getPassType();
+            StudyCafePasses passes = getPassesBy(passType);
+            StudyCafePass selectedPass = getSelectedPassBy(passes);
 
             StudyCafeLockerPass lockerPass = null;
-            if (studyCafePassType.isFixed()) {
-                lockerPass = getStudyCafeLockerPass(selectedPass);
+            if (passType.isFixed()) {
+                lockerPass = getLockerPassBy(selectedPass);
                 if (lockerPass != null) {
-                    outputHandler.askLockerPass(lockerPass);
-                    StudyCafeLockerPassType lockerPassType = inputHandler.getLockerPassTypeSelectingUserAction();
+                    StudyCafeLockerPassType lockerPassType = getLockerPassType(lockerPass);
                     if (lockerPassType.isNotUse()) {
                         lockerPass = null;
                     }
@@ -54,24 +53,29 @@ public class StudyCafePassMachine implements MachineRunnable {
         }
     }
 
-    private StudyCafePassType getStudyCafePassType() {
+    private StudyCafePassType getPassType() {
         outputHandler.askPassTypeSelection();
         return inputHandler.getPassTypeSelectingUserAction();
     }
 
-    private StudyCafePasses getStudyCafePassesBy(StudyCafePassType type) {
+    private StudyCafePasses getPassesBy(StudyCafePassType type) {
         StudyCafePasses studyCafePasses = fileHandler.readStudyCafePasses();
         return studyCafePasses.getSameTypePasses(type);
     }
 
-    private StudyCafePass getSelectedPass(StudyCafePasses studyCafePasses) {
+    private StudyCafePass getSelectedPassBy(StudyCafePasses studyCafePasses) {
         outputHandler.showPassListForSelection(studyCafePasses);
         return inputHandler.getSelectPass(studyCafePasses);
     }
 
-    private StudyCafeLockerPass getStudyCafeLockerPass(StudyCafePass selectedPass) {
+    private StudyCafeLockerPass getLockerPassBy(StudyCafePass selectedPass) {
         StudyCafeLockerPasses lockerPasses = fileHandler.readLockerPasses();
         return lockerPasses.getSameTypePasses(selectedPass);
+    }
+
+    private StudyCafeLockerPassType getLockerPassType(StudyCafeLockerPass lockerPass) {
+        outputHandler.askLockerPass(lockerPass);
+        return inputHandler.getLockerPassTypeSelectingUserAction();
     }
 
 }
